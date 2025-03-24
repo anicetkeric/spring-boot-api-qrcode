@@ -20,6 +20,7 @@ public class BarcodeServiceImpl implements BarcodeService {
 
     private static final String DEFAULT_IMAGE_FORMAT = "png";
 
+    @Override
     public byte[] generateQRCode(String text) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 400, 400);
@@ -32,6 +33,7 @@ public class BarcodeServiceImpl implements BarcodeService {
         return pngOutputStream.toByteArray();
     }
 
+    @Override
     public byte[] generateBarcode(String text) throws IOException, WriterException {
         var height = 200;
         var width = 400;
@@ -41,7 +43,7 @@ public class BarcodeServiceImpl implements BarcodeService {
         MultiFormatWriter writer = new MultiFormatWriter();
         BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.EAN_13, width, height, hints);
 
-        BufferedImage image = new BufferedImage(400, 200, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 image.setRGB(x, y, bitMatrix.get(x, y) ? 0 : 0xFFFFFF);
@@ -53,6 +55,5 @@ public class BarcodeServiceImpl implements BarcodeService {
 
         return pngOutputStream.toByteArray();
     }
-
 
 }
